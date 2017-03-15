@@ -4,21 +4,37 @@
 // Must be able to list all children who are getting a toy.
 // Must be able to list all toys for a given child's name.
 // Must be able to set the delivered property of a child, which defaults to false, to true.
-const { assert: { isTrue, equal } } = require('chai');
+const { assert: { isTrue, equal, deepEqual } } = require('chai');
 const { getToysByChild, addToy, removeToy, getListOfChildren, makeChildHappy } = require('../lootbag');
 
 describe('lootBag', () => {
   describe('getToysByChild', () => {
     it('should return an array', () => {
-      let result = getToysByChild();
-      isTrue(Array.isArray(result));
+      return getToysByChild("Timmy")
+      .then( (data) => {
+        isTrue(Array.isArray(data));  
+      });
+    });
+
+    it('should contain a collection of strings', () => {
+      let expected = `Furby, soccer ball, stuffed unicorn, Bananagrams`;
+      return getToysByChild("Timmy")
+      .then( (toyData) => {
+        let result = toyData.join(", ");
+        equal(result, expected);
+      });
     });
   });
 
-  describe('addToy',  () => {
+  describe('addToy', () => {
     it('should verify that a toy was added', () => {
-      let expected = "Toy added to database";
-      equal(expected, addToy());
+      return addToy("Barbie Doll", "Fred")
+      .then( () => {
+        return getToysByChild("Fred")
+      })
+      .then( (toyArr) => {
+        deepEqual(["Barbie Doll"], toyArr)
+      });
     });
   });
 
