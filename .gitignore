@@ -1,3 +1,8 @@
+.DS_Store
+
+# Any DBs
+*.sqlite
+
 # Logs
 logs
 *.log
